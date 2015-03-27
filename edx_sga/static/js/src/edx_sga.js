@@ -31,14 +31,14 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                         .text('Upload ' + data.files[0].name)
                         .appendTo(do_upload)
                         .click(function() {
-                            do_upload.text("Uploading...");
+                            do_upload.text("Вивантажується...");
                             data.submit();
                         });
                 },
                 progressall: function(e, data) {
                     var percent = parseInt(data.loaded / data.total * 100, 10);
                     $(content).find(".upload").text(
-                        "Uploading... " + percent + "%");
+                        "Вивантажується... " + percent + "%");
                 },
                 fail: function(e, data) {
                     /**
@@ -52,11 +52,13 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                          * here, so no good way to inform the user of what the
                          * limit is.
                          */
-                        state.error = "The file you are trying to upload is too large."
+                        //state.error = "The file you are trying to upload is too large."
+                        state.error = "Файл, який ви намагається вивантажити, надто великий."
                     }
                     else {
                         // Suitably vague
-                        state.error = "There was an error uploading your file.";
+                        //state.error = "There was an error uploading your file.";
+                        state.error = "Під час вивантаження вашого файлу сталась помилка.";
 
                         // Dump some information to the console to help someone
                         // debug.
@@ -119,7 +121,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     url: url,
                     progressall: function(e, data) {
                         var percent = parseInt(data.loaded / data.total * 100, 10);
-                        row.find(".upload").text("Uploading... " + percent + "%");
+                        row.find(".upload").text("Вивантажується... " + percent + "%");
                     },
                     done: function(e, data) { 
                         // Add a time delay so user will notice upload finishing
@@ -146,16 +148,20 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                 var score = Number(form.find("#grade-input").val());
                 event.preventDefault();
                 if (isNaN(score)) {
-                    form.find(".error").html("<br/>Grade must be a number.");
+                    //form.find(".error").html("<br/>Grade must be a number.");
+                    form.find(".error").html("<br/>Оцінка повинна бути числом.");
                 } 
                 else if (score != parseInt(score)) {
-                    form.find(".error").html("<br/>Grade must be an integer.");
+                    //form.find(".error").html("<br/>Grade must be an integer.");
+                    form.find(".error").html("<br/>Оцінка повинна бути цілим числом.");
                 }
                 else if (score < 0) {
-                    form.find(".error").html("<br/>Grade must be positive.");
+                    //form.find(".error").html("<br/>Grade must be positive.");
+                    form.find(".error").html("<br/>Оцінка має бути додатним числом.");
                 }
                 else if (score > max_score) {
-                    form.find(".error").html("<br/>Maximum score is " + max_score);
+                    //form.find(".error").html("<br/>Maximum score is " + max_score);
+                    form.find(".error").html("<br/>Максимальна оцінка - " + max_score);
                 }
                 else {
                     // No errors
