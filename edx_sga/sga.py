@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This block defines a Staff Graded Assignment.  Students are shown a rubric
 and invited to upload a file which is then graded by staff.
@@ -57,40 +58,48 @@ class StaffGradedAssignmentXBlock(XBlock):
     icon_class = 'problem'
 
     display_name = String(
-        default='Staff Graded Assignment', scope=Scope.settings,
-        help="This name appears in the horizontal navigation at the top of "
-             "the page."
+        default=u'Завдання оцінюване викладачем', scope=Scope.settings,
+        help=u"Ця назва з’явиться в горизонтальній панелі навігації згори сторінки."
     )
 
     weight = Float(
-        display_name="Problem Weight",
-        help=("Defines the number of points each problem is worth. "
-              "If the value is not set, the problem is worth the sum of the "
-              "option point values."),
+#        display_name="Problem Weight",
+#        help=("Defines the number of points each problem is worth. "
+#              "If the value is not set, the problem is worth the sum of the "
+#              "option point values."),
+        display_name=u"Вага завдання",
+        help=(u"Визначає кількість балів, які даються за кожне завдання. "
+              u"Якщо значення не вказано, то завдання оцінюється як сума опціональних оцінок "),
         values={"min": 0, "step": .1},
         scope=Scope.settings
     )
 
     points = Integer(
-        display_name="Maximum score",
-        help=("Maximum grade score given to assignment by staff."),
+#        display_name="Maximum score",
+#        help=("Maximum grade score given to assignment by staff."),
+        display_name=u"Максимальна оцінка",
+        help=u"Максимальна оцінка, яка може бути призначена викладачем.",
         default=100,
         scope=Scope.settings
     )
 
     staff_score = Integer(
-        display_name="Score assigned by non-instructor staff",
-        help=("Score will need to be approved by instructor before being "
-              "published."),
+#        display_name="Score assigned by non-instructor staff",
+#        help=("Score will need to be approved by instructor before being "
+#              "published."),
+        display_name=u"Оцінка, яка призначається не викладачем",
+        help=u"Оцінка повинна буде підтверджена викладачем перед тим як стане доступною.",
         default=None,
         scope=Scope.settings
     )
 
     comment = String(
-        display_name="Instructor comment",
+#        display_name="Instructor comment",
+#        help="Feedback given to student by instructor."
+        display_name=u"Коментар викладача",
+        help=u"Коментар, який викладач надає студенту.",
         default='',
         scope=Scope.user_state,
-        help="Feedback given to student by instructor."
     )
 
     annotated_sha1 = String(
@@ -102,10 +111,12 @@ class StaffGradedAssignmentXBlock(XBlock):
     )
 
     annotated_filename = String(
-        display_name="Annotated file name",
+#        display_name="Annotated file name",
+#        help="The name of the annotated file uploaded for this assignment."
+        display_name=u"Файл з анотаціями",
+        help=u"Ім’я файлу з аонтаціями, який було завантажено для цього завдання."?
         scope=Scope.user_state,
         default=None,
-        help="The name of the annotated file uploaded for this assignment."
     )
 
     annotated_mimetype = String(
