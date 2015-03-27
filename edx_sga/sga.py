@@ -114,7 +114,7 @@ class StaffGradedAssignmentXBlock(XBlock):
 #        display_name="Annotated file name",
 #        help="The name of the annotated file uploaded for this assignment."
         display_name=u"Файл з анотаціями",
-        help=u"Ім’я файлу з аонтаціями, який було завантажено для цього завдання."?
+        help=u"Ім’я файлу з анотаціями, який було завантажено для цього завдання.",
         scope=Scope.user_state,
         default=None,
     )
