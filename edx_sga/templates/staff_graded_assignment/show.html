@@ -4,34 +4,34 @@
      data-staff="{{ is_course_staff }}">
   <script type="text/template" id="sga-tmpl">
     <% if (uploaded) { %>
-      <p><b>File uploaded</b> 
+      <p><b>Файл вивантажено</b> 
         <a href="<%= downloadUrl %>"><%= uploaded.filename %></a></p>
     <% } else { %>
-      <p>No file has been uploaded.</p>
+      <p>Жодного файлу не було вивантажено.</p>
     <% } %>
     <% if (graded) { %>
-      <p>Your score is <%= graded.score %> / <%= max_score %><br/>
+      <p>Ваша оцінка - <%= graded.score %> / <%= max_score %><br/>
         <% if (graded.comment) { %>
-          <b>Instructor comment</b> <%= graded.comment %>
+          <b>Коментар викладача</b> <%= graded.comment %>
         <% } %>
         <% if (annotated) { %><br/>
-          <b>Annotated file from instructor</b>
+          <b>Файл з анотаціями від викладача</b>
           <a href="<%= annotatedUrl %>"><%= annotated.filename %></a>
         <% } %>
       </p>
     <% } else if (uploaded) { %>
-      {% trans "This assignment has not yet been graded." %}
+      {% trans "Це завдання ще не було оцінено." %}
     <% } %>
     <% if (upload_allowed) { %>
     <p>
       <% if (uploaded) { %>
-        {% trans "Upload a different file" %}
+        {% trans "Вивантажити інший файл" %}
       <% } else { %>
-        {% trans "Upload your assignment" %}
+        {% trans "Вивантажить вашу роботу" %}
       <% } %>
       <div class="upload">
         <input class="fileupload" type="file" name="assignment"/>
-        <button>Select a file</button>
+        <button>Оберіть файл</button>
       </div>
     </p>
     <% } %>
@@ -47,19 +47,17 @@
   <script type="text/template" id="sga-grading-tmpl">
     <table class="gridtable">
       <tr>
-        <th>Username</th>
-        <th>Name</th>
-        <th>Filename</th>
-        <th>Uploaded</th>
-        <th>Grade</th>
-        <th>Instructor's comments</th>
-        <th>Annotated</th>
+        <th>Студент</th>
+        <th>Ім’я файлу</th>
+        <th>Дата завантаження</th>
+        <th>Оцінка</th>
+        <th>Коментар викладача</th>
+        <th>Анотації</th>
       </tr>
       <% for (var i = 0; i < assignments.length; i++) { %>
       <%     var assignment = assignments[i]; %>
         <tr id="row-<%= assignment.module_id %>">
           <td><%= assignment.username %></td>
-          <td><%= assignment.fullname %></td>
           <td>
             <% if (assignment.filename) { %>
               <a href="<%= downloadUrl %>?student_id=<%= assignment.student_id %>">
@@ -73,7 +71,7 @@
               <%= assignment.score %> /
               <%= max_score %>
               <% if (! assignment.approved) { %>
-                ({% trans "Awaiting instructor approval" %})
+                ({% trans "Очікується підтвердження від викладача" %})
               <% } %>
             <% } %>
           </td>
@@ -87,19 +85,19 @@
           </td>
           <td>
             <% if (assignment.may_grade) { %>
-              <a class="enter-grade-button" href="#{{ id }}-enter-grade">
+              <a class="enter-grade-button button" href="#{{ id }}-enter-grade">
                 <% if (assignment.needs_approval) { %>
-                  {% trans "Approve grade" %}
+                  {% trans "Підтвердити оцінку" %}
                 <% } else { %>
-                  {% trans "Enter grade" %}
+                  {% trans "Введіть оцінку" %}
                 <% } %>
               </a>
-            <% } %>
+           <% } %>
           </td>
           <td>
             <div class="upload">
               <input class="fileupload" type="file" name="annotated"/>
-              <button>Upload annotated file</button>
+              <button>Вивантажіть файл з анотаціями</button>
             </div>
           </td>
         </tr>
@@ -109,17 +107,17 @@
 
   <div aria-hidden="true" class="wrap-instructor-info">
     <a class="instructor-info-action" id="grade-submissions-button"
-       href="#{{ id }}-grade">{% trans "Grade Submissions" %}</a>
+       href="#{{ id }}-grade">{% trans "Переглянути оцінки" %}</a>
     <a class="instructor-info-action" id="staff-debug-info-button"
        href="#{{ id }}-debug">{% trans "Staff Debug Info" %}</a>
   </div>
 
   <section aria-hidden="true" class="modal staff-modal" id="{{ id }}-grade" style="height: 75%">
     <div class="inner-wrapper" style="color: black; overflow: auto;">
-      <header><h2>{% trans "Staff Graded Assignment" %}</h2></header>
+      <header><h2>{% trans "Завдання оцінюване викладачем" %}</h2></header>
       <br/>
       <div id="grade-info" style="display: block;">
-        Loading...
+        Завантажується...
       </div>
     </div>
   </section>
