@@ -1,0 +1,166 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-03-29 22:46+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: templates/staff_graded_assignment/edit.html:21
+msgid "Settings"
+msgstr "Параметри"
+
+#: templates/staff_graded_assignment/show.html:7
+msgid "File uploaded"
+msgstr "Файл вивантажено"
+
+#: templates/staff_graded_assignment/show.html:10
+msgid "No file has been uploaded."
+msgstr "Жодного файлу не було вивантажено"
+
+#: templates/staff_graded_assignment/show.html:13
+msgid "Your score is"
+msgstr "Ваша оцінка"
+
+#: templates/staff_graded_assignment/show.html:15
+msgid "Instructor comment"
+msgstr "Коментар викладача"
+
+#: templates/staff_graded_assignment/show.html:18
+msgid "Annotated file from instructor"
+msgstr "Файл з анотаціями від викладача"
+
+#: templates/staff_graded_assignment/show.html:23
+#: templates/staff_graded_assignment/show_en.html:23
+msgid "This assignment has not yet been graded."
+msgstr "Це завданян ще не було оцінено."
+
+#: templates/staff_graded_assignment/show.html:28
+#: templates/staff_graded_assignment/show_en.html:28
+msgid "Upload a different file"
+msgstr "Вивантажіть інший файл"
+
+#: templates/staff_graded_assignment/show.html:30
+#: templates/staff_graded_assignment/show_en.html:30
+msgid "Upload your assignment"
+msgstr "Вивантажіть ваше завдання"
+
+#: templates/staff_graded_assignment/show.html:34
+msgid "Select a file"
+msgstr "Оберіть файл"
+
+#: templates/staff_graded_assignment/show.html:50
+msgid "Username"
+msgstr "Користувач"
+
+#: templates/staff_graded_assignment/show.html:51
+msgid "Filename"
+msgstr "Файл"
+
+#: templates/staff_graded_assignment/show.html:52
+msgid "Uploaded"
+msgstr "Вивантажено"
+
+#: templates/staff_graded_assignment/show.html:53
+msgid "Grade"
+msgstr "Оцінка"
+
+#: templates/staff_graded_assignment/show.html:54
+msgid "Instructor's comments"
+msgstr "Коментар викладача"
+
+#: templates/staff_graded_assignment/show.html:55
+msgid "Annotated"
+msgstr "Анотовано"
+
+#: templates/staff_graded_assignment/show.html:75
+#: templates/staff_graded_assignment/show_en.html:76
+msgid "Awaiting instructor approval"
+msgstr "Очікується підтвердження від викладача"
+
+#: templates/staff_graded_assignment/show.html:91
+#: templates/staff_graded_assignment/show_en.html:92
+msgid "Approve grade"
+msgstr "Підтвердити оцінку"
+
+#: templates/staff_graded_assignment/show.html:93
+#: templates/staff_graded_assignment/show_en.html:94
+msgid "Enter grade"
+msgstr "Ввести оцінку"
+
+#: templates/staff_graded_assignment/show.html:101
+msgid "Upload annotated file"
+msgstr "Вивантажити анотований файл"
+
+#: templates/staff_graded_assignment/show.html:111
+#: templates/staff_graded_assignment/show_en.html:112
+msgid "Grade Submissions"
+msgstr "Оцінити"
+
+#: templates/staff_graded_assignment/show.html:113
+#: templates/staff_graded_assignment/show_en.html:114
+#: templates/staff_graded_assignment/show_ua.html:112
+msgid "Staff Debug Info"
+msgstr "Інформація для співробітників"
+
+#: templates/staff_graded_assignment/show.html:118
+#: templates/staff_graded_assignment/show_en.html:119
+msgid "Staff Graded Assignment"
+msgstr "Завдання оцінюване викладачем"
+
+#: templates/staff_graded_assignment/show.html:129
+#: templates/staff_graded_assignment/show_en.html:130
+#: templates/staff_graded_assignment/show_ua.html:128
+msgid "Staff Debug"
+msgstr ""
+
+#: templates/staff_graded_assignment/show.html:136
+#: templates/staff_graded_assignment/show_en.html:137
+#: templates/staff_graded_assignment/show_ua.html:135
+msgid "Module Fields"
+msgstr "Поля модуля"
+
+#: templates/staff_graded_assignment/show.html:154
+#: templates/staff_graded_assignment/show_en.html:155
+msgid "Enter Grade"
+msgstr "Введіть оцінку"
+
+#: templates/staff_graded_assignment/show.html:161
+msgid "Grade for"
+msgstr "Оцінка за"
+
+#: templates/staff_graded_assignment/show.html:162
+msgid "Grade:"
+msgstr "Оцінка:"
+
+#: templates/staff_graded_assignment/show.html:164
+msgid "Comment:"
+msgstr "Коментар:"
+
+#: templates/staff_graded_assignment/show.html:166
+#: templates/staff_graded_assignment/show_en.html:167
+msgid "Submit"
+msgstr "Відправити"
+
+#: templates/staff_graded_assignment/show.html:168
+#: templates/staff_graded_assignment/show_en.html:169
+msgid "Cancel"
+msgstr "Відмінити"
+
+#: templates/staff_graded_assignment/show.html:171
+#: templates/staff_graded_assignment/show_en.html:172
+msgid "Remove grade"
+msgstr "Видалити оцінку"

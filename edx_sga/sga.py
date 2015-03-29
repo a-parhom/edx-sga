@@ -37,7 +37,6 @@ from xmodule.util.duedate import get_extended_due_date
 
 log = logging.getLogger(__name__)
 
-
 def reify(meth):
     """
     Property which caches value so it is only computed once.
@@ -95,7 +94,7 @@ class StaffGradedAssignmentXBlock(XBlock):
 
     comment = String(
 #        display_name="Instructor comment",
-#        help="Feedback given to student by instructor."
+#        help="Feedback given to student by instructor.",
         display_name=u"Коментар викладача",
         help=u"Коментар, який викладач надає студенту.",
         default='',
@@ -112,7 +111,7 @@ class StaffGradedAssignmentXBlock(XBlock):
 
     annotated_filename = String(
 #        display_name="Annotated file name",
-#        help="The name of the annotated file uploaded for this assignment."
+#        help="The name of the annotated file uploaded for this assignment.",
         display_name=u"Файл з анотаціями",
         help=u"Ім’я файлу з анотаціями, який було завантажено для цього завдання.",
         scope=Scope.user_state,
