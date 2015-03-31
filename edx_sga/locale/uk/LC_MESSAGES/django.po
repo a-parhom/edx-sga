@@ -46,7 +46,7 @@ msgstr "Файл з анотаціями від викладача"
 #: templates/staff_graded_assignment/show.html:23
 #: templates/staff_graded_assignment/show_en.html:23
 msgid "This assignment has not yet been graded."
-msgstr "Це завданян ще не було оцінено."
+msgstr "Це завдання ще не було оцінено."
 
 #: templates/staff_graded_assignment/show.html:28
 #: templates/staff_graded_assignment/show_en.html:28
