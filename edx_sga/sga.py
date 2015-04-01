@@ -11,6 +11,7 @@ import mimetypes
 import os
 import pkg_resources
 import pytz
+import urllib
 
 from functools import partial
 
@@ -438,7 +439,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         return Response(
             app_iter=app_iter,
             content_type=mimetype,
-            content_disposition="attachment; filename=" + filename.decode('unicode_escape'))
+            content_disposition="attachment; filename=" + urllib.quote(filename.decode('unicode_escape').encode('utf-8')))
 
     @XBlock.handler
     def get_staff_grading_data(self, request, suffix=''):
