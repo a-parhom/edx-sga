@@ -436,12 +436,11 @@ class StaffGradedAssignmentXBlock(XBlock):
         BLOCK_SIZE = (1 << 10) * 8  # 8kb
         file = default_storage.open(path)
         app_iter = iter(partial(file.read, BLOCK_SIZE), '')
-        # ufile_name = filename.decode('unicode_escape').encode('utf-8')
-        ufile_name = filename
+
         return Response(
             app_iter=app_iter,
             content_type=mimetype,
-            content_disposition="attachment; filename=" + urllib.quote(ufile_name))
+            content_disposition="attachment; filename=" + urllib.quote(filename.encode('utf-8')))
 
     @XBlock.handler
     def get_staff_grading_data(self, request, suffix=''):
