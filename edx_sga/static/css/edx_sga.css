@@ -33,7 +33,11 @@
     border-style: solid;
     border-color: #666666;
     background-color: #dedede;
-    width: 15%;
+    width: 10%;
+}
+
+.sga-block table.gridtable th:nth-child(6) {
+    width: 30%;
 }
 
 .sga-block table.gridtable td {
@@ -156,7 +160,7 @@
     left: 0px;
     z-index: 2;
     padding: 2px;
-    width: 200px;
+    width: 100px;
     color: #333346;
     font-weight: bold;
     font-size: 0.8125em;
