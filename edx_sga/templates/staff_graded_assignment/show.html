@@ -3,9 +3,12 @@
 {% language 'uk' %}
 <!-- Current language: {{ LANGUAGE_CODE }} -->
 
-<div class="sga-block" data-state="{{ student_state }}" 
+<div class="sga-block" data-state="{{ student_state }}" data-max-size="{{ max_file_size }}"
      data-staff="{{ is_course_staff }}">
   <script type="text/template" id="sga-tmpl">
+    <% if (display_name) { %>
+       <b><%= display_name %></b>
+    <% } %>
     <% if (uploaded) { %>
       <p><b>{% trans "File uploaded" %}</b> 
         <a href="<%= downloadUrl %>"><%= uploaded.filename %></a></p>
@@ -48,16 +51,20 @@
 
   {% if is_course_staff %}
   <script type="text/template" id="sga-grading-tmpl">
-    <table class="gridtable">
+    <table class="gridtable tablesorter" id="submissions">
+      <thead>
       <tr>
-        <th>{% trans "Username" %}</th>
-        <th>{% trans "Name" %}</th>  
-        <th>{% trans "Filename" %}</th>
-        <th>{% trans "Uploaded" %}</th>
-        <th>{% trans "Grade" %}</th>
-        <th>{% trans "Instructor's comments" %}</th>
-        <th>{% trans "Annotated" %}</th>
+        <th class="header">{% trans "Username" %} <i class="icon fa fa-sort"/></th>
+        <th class="header">{% trans "Name" %} <i class="icon fa fa-sort"/></th>
+        <th class="header">{% trans "Filename" %} <i class="icon fa fa-sort"/></th>
+        <th class="header">{% trans "Uploaded" %} <i class="icon fa fa-sort"/></th>
+        <th class="header">{% trans "Grade" %} <i class="icon fa fa-sort"/></th>
+        <th class="header">{% trans "Instructor's comments" %} <i class="icon fa fa-sort"/></th>
+        <th class="header">{% trans "Annotated" %} <i class="icon fa fa-sort"/></th>
+        <th class="header" colspan="2">{% trans "Actions" %}</th>
       </tr>
+      </thead>
+      <tbody>
       <% for (var i = 0; i < assignments.length; i++) { %>
       <%     var assignment = assignments[i]; %>
         <tr id="row-<%= assignment.module_id %>">
@@ -107,6 +114,7 @@
           </td>
         </tr>
       <% } %>
+      </tbody>
     </table>
   </script>
 
@@ -119,7 +127,7 @@
 
   <section aria-hidden="true" class="modal staff-modal" id="{{ id }}-grade" style="height: 75%">
     <div class="inner-wrapper" style="color: black; overflow: auto;">
-      <header><h2>{% trans "Staff Graded Assignment" %}</h2></header>
+      <header><h2><span class="display_name">{{ display_name }}</span> - {% trans "Staff Graded Assignment" %}</h2></header>
       <br/>
       <div id="grade-info" style="display: block;">
         Loading...
