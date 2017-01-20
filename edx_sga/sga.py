@@ -529,7 +529,6 @@ class StaffGradedAssignmentXBlock(XBlock):
             require_staff=True
         )
 
-<<<<<<< HEAD
 #    def download(self, path, mimetype, filename):
 #        BLOCK_SIZE = (1 << 10) * 8  # 8kb
 #        file = default_storage.open(path)
