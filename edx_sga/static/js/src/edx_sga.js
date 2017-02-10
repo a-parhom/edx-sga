@@ -108,7 +108,12 @@ function StaffGradedAssignmentXBlock(runtime, element) {
         }
 
         function renderStaffGrading(data) {
-            $('.grade-modal').hide();
+            if (data.hasOwnProperty('error')) {
+              gradeFormError(data['error']);
+            } else {
+              gradeFormError('');
+              $('.grade-modal').hide();
+            }
 
             if (data.display_name !== '') {
                 $('.sga-block .display_name').html(data.display_name);
@@ -186,6 +191,12 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             $("#submissions").trigger("sorton",[sorting]);
         }
 
+        /* Just show error on enter grade dialog */
+        function gradeFormError(error) {
+            var form = $(element).find("#enter-grade-form");
+            form.find('.error').html(error);
+        }
+
         /* Click event handler for "enter grade" */
         function handleGradeEntry() {
             var row = $(this).parents("tr");
@@ -199,33 +210,32 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                 var max_score = row.parents('#grade-info').data('max_score');
                 var score = Number(form.find('#grade-input').val());
                 event.preventDefault();
-                if (isNaN(score)) {
-                    //form.find(".error").html("<br/>Grade must be a number.");
-                    form.find(".error").html("<br/>Оцінка повинна бути числом.");
-                } 
-                else if (score != parseInt(score)) {
-                    //form.find(".error").html("<br/>Grade must be an integer.");
-                    form.find(".error").html("<br/>Оцінка повинна бути цілим числом.");
-                }
-                else if (score < 0) {
-                    //form.find(".error").html("<br/>Grade must be positive.");
-                    form.find(".error").html("<br/>Оцінка має бути додатним числом.");
-                }
-                else if (score > max_score) {
-                    //form.find(".error").html("<br/>Maximum score is " + max_score);
-                    form.find(".error").html("<br/>Максимальна оцінка - " + max_score);
-                }
-                else {
+
+                if (!score) {
+                    gradeFormError('<br/>Оцінка повинна бути числом.');
+                } else if (score !== parseInt(score)) {
+                    gradeFormError('<br/>Оцінка повинна бути цілим числом.');
+                } else if (score < 0) {
+                    gradeFormError('<br/>Оцінка має бути додатним числом.');
+                } else if (score > max_score) {
+                    gradeFormError('<br/>Максимальна оцінка - ' + max_score);
+                } else {
                     // No errors
                     $.post(enterGradeUrl, form.serialize())
                         .success(renderStaffGrading);
                 }
             });
-            form.find('#remove-grade').on('click', function() {
+            form.find('#remove-grade').on('click', function(event) {
                 var url = removeGradeUrl + '?module_id=' +
                     row.data('module_id') + '&student_id=' +
                     row.data('student_id');
-                $.get(url).success(renderStaffGrading);
+                event.preventDefault();
+                if (row.data('score')) {
+                  // if there is no grade then it is pointless to call api.
+                  $.get(url).success(renderStaffGrading);
+                } else {
+                    gradeFormError('<br/>No grade to remove.');
+                }
             });
             form.find('#enter-grade-cancel').on('click', function() {
                 /* We're kind of stretching the limits of leanModal, here,
@@ -244,6 +254,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                  */
                 setTimeout(function() {
                     $('#grade-submissions-button').click();
+                    gradeFormError('');
                 }, 225);
             });
         }
