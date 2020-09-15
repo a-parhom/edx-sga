@@ -1,7 +1,12 @@
 """Setup for edx-sga XBlock."""
 
+from __future__ import absolute_import
+
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
+
+import edx_sga
 
 
 def package_data(pkg, root_list):
@@ -16,7 +21,7 @@ def package_data(pkg, root_list):
 
 setup(
     name='edx-sga',
-    version='0.6.2',
+    version=edx_sga.__version__,
     description='edx-sga Staff Graded Assignment XBlock',
     license='Affero GNU General Public License v3 (GPLv3)',
     url="https://github.com/mitodl/edx-sga",
@@ -26,6 +31,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'XBlock',
+        'xblock-utils',
     ],
     entry_points={
         'xblock.v1': [

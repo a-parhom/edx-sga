@@ -2,6 +2,7 @@
 function StaffGradedAssignmentXBlock(runtime, element) {
     function xblock($, _) {
         var uploadUrl = runtime.handlerUrl(element, 'upload_assignment');
+        var finalizeUploadUrl = runtime.handlerUrl(element, 'finalize_uploaded_assignment');
         var downloadUrl = runtime.handlerUrl(element, 'download_assignment');
         var annotatedUrl = runtime.handlerUrl(element, 'download_annotated');
         var getStaffGradingUrl = runtime.handlerUrl(
@@ -14,8 +15,14 @@ function StaffGradedAssignmentXBlock(runtime, element) {
         var staffUploadUrl = runtime.handlerUrl(element, 'staff_upload_annotated');
         var enterGradeUrl = runtime.handlerUrl(element, 'enter_grade');
         var removeGradeUrl = runtime.handlerUrl(element, 'remove_grade');
+        var downloadSubmissionsUrl = runtime.handlerUrl(element, 'download_submissions');
+        var prepareDownloadSubmissionsUrl = runtime.handlerUrl(element, 'prepare_download_submissions');
+        var downloadSubmissionsStatusUrl = runtime.handlerUrl(element, 'download_submissions_status');
         var template = _.template($(element).find("#sga-tmpl").text());
         var gradingTemplate;
+        var preparingSubmissionsMsg = gettext(
+          'Started preparing student submissions zip file. This may take a while.'
+        );
 
         function render(state) {
             // Add download urls to template context
@@ -26,30 +33,38 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             // Render template
             var content = $(element).find('#sga-content').html(template(state));
 
+            $(content).find('.finalize-upload').on('click', function() {
+              $.post(finalizeUploadUrl).success(
+                  function (state) {
+                      render(state);
+                  }
+              ).fail(
+                  function () {
+                      state.error = gettext('Submission failed. Please contact your course instructor.');
+                      render(state);
+                  }
+              );
+            });
+
             // Set up file upload
             var fileUpload = $(content).find('.fileupload').fileupload({
                 url: uploadUrl,
                 add: function(e, data) {
                     var do_upload = $(content).find('.upload').html('');
                     $(content).find('p.error').html('');
-                    $('<button/>')
-                        .text('Upload ' + data.files[0].name)
-                        .appendTo(do_upload)
-                        .click(function() {
-                            do_upload.text("Вивантажується...");
-                            var block = $(element).find(".sga-block");
-                            var data_max_size = block.attr("data-max-size");
-                            var size = data.files[0].size;
-                            if (!_.isUndefined(size)) {
-                                //if file size is larger max file size define in env(django)
-                                if (size >= data_max_size) {
-                                    state.error = 'The file you are trying to upload is too large.';
-                                    render(state);
-                                    return;
-                                }
-                            }
-                            data.submit();
-                        });
+                    do_upload.text(gettext('Uploading...'));
+                    var block = $(element).find(".sga-block");
+                    var data_max_size = block.attr("data-max-size");
+                    var size = data.files[0].size;
+                    if (!_.isUndefined(size)) {
+                        //if file size is larger max file size define in env(django)
+                        if (size >= data_max_size) {
+                            state.error = gettext('The file you are trying to upload is too large.');
+                            render(state);
+                            return;
+                        }
+                    }
+                    data.submit();
                 },
                 progressall: function(e, data) {
                     var percent = parseInt(data.loaded / data.total * 100, 10);
@@ -68,13 +83,10 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                          * here, so no good way to inform the user of what the
                          * limit is.
                          */
-                        //state.error = "The file you are trying to upload is too large."
-                        state.error = "Файл, який ви намагається вивантажити, надто великий."
-                    }
-                    else {
+                        state.error = gettext('The file you are trying to upload is too large.');
+                    } else {
                         // Suitably vague
-                        //state.error = "There was an error uploading your file.";
-                        state.error = "Під час вивантаження вашого файлу сталась помилка.";
+                        state.error = gettext('There was an error uploading your file.');
 
                         // Dump some information to the console to help someone
                         // debug.
@@ -105,6 +117,9 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             });
 
             updateChangeEvent(fileUpload);
+            if (state.error) {
+              $(content).find('p.error').focus();
+            }
         }
 
         function renderStaffGrading(data) {
@@ -130,8 +145,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
 
             // Map data to table rows
             data.assignments.map(function(assignment) {
-                $(element).find('#grade-info #row-' + assignment.module_id)
-                    .data(assignment);
+              $(element).find('#grade-info #row-' + assignment.module_id).data(assignment);
             });
 
             // Set up grade entry modal
@@ -147,7 +161,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     url: url,
                     progressall: function(e, data) {
                         var percent = parseInt(data.loaded / data.total * 100, 10);
-                        row.find(".upload").text("Вивантажується... " + percent + "%");
+                        row.find('.upload').text(interpolate(gettext('Uploading... %(percent)s %'), {percent: percent}, true));
                     },
                     done: function(e, data) {
                         // Add a time delay so user will notice upload finishing
@@ -175,6 +189,17 @@ function StaffGradedAssignmentXBlock(runtime, element) {
               type: 'text'
             });
 
+            $.tablesorter.addParser({
+                id: 'yesno',
+                is: function(s) {
+                    return false;
+                },
+                format: function(s) {
+                    return s.toLowerCase().trim() === gettext('yes') ? 1 : 0;
+                },
+                type: 'text'
+            });
+
             function pad(num) {
               var s = '00000' + num;
               return s.substr(s.length-5);
@@ -183,12 +208,17 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                 headers: {
                   2: { sorter: "alphanum" },
                   3: { sorter: "alphanum" },
-                  6: { sorter: "alphanum" }
+                  4: { sorter: "yesno" },
+                  7: { sorter: "alphanum" }
                 }
             });
             $("#submissions").trigger("update");
-            var sorting = [[1,0]];
+            var sorting = [[4,1], [1,0]];
             $("#submissions").trigger("sorton",[sorting]);
+        }
+
+        function isStaff() {
+          return $(element).find('.sga-block').attr('data-staff') === 'True';
         }
 
         /* Just show error on enter grade dialog */
@@ -206,35 +236,45 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             form.find('#submission_id-input').val(row.data('submission_id'));
             form.find('#grade-input').val(row.data('score'));
             form.find('#comment-input').text(row.data('comment'));
+            form.find('#remove-grade').prop('disabled', false);
+            form.find('.ccx-enter-grade-spinner').hide();
             form.off('submit').on('submit', function(event) {
                 var max_score = row.parents('#grade-info').data('max_score');
                 var score = Number(form.find('#grade-input').val());
                 event.preventDefault();
-
                 if (!score) {
-                    gradeFormError('<br/>Оцінка повинна бути числом.');
+                    gradeFormError('<br/>'+gettext('Grade must be a number.'));
                 } else if (score !== parseInt(score)) {
-                    gradeFormError('<br/>Оцінка повинна бути цілим числом.');
+                    gradeFormError('<br/>'+gettext('Grade must be an integer.'));
                 } else if (score < 0) {
-                    gradeFormError('<br/>Оцінка має бути додатним числом.');
+                    gradeFormError('<br/>'+gettext('Grade must be positive.'));
                 } else if (score > max_score) {
-                    gradeFormError('<br/>Максимальна оцінка - ' + max_score);
+                    gradeFormError('<br/>'+interpolate(gettext('Maximum score is %(max_score)s'), {max_score:max_score}, true));
                 } else {
                     // No errors
+                    form.find('.ccx-enter-grade-spinner').show();
                     $.post(enterGradeUrl, form.serialize())
-                        .success(renderStaffGrading);
+                        .success(renderStaffGrading)
+                        .fail(function() {
+                            form.find('.ccx-enter-grade-spinner').hide();
+                        });
                 }
             });
-            form.find('#remove-grade').on('click', function(event) {
+            form.find('#remove-grade').off('click').on('click', function(event) {
+                $(this).prop('disabled', true);
+                form.find('.ccx-enter-grade-spinner').show();
                 var url = removeGradeUrl + '?module_id=' +
                     row.data('module_id') + '&student_id=' +
                     row.data('student_id');
                 event.preventDefault();
                 if (row.data('score')) {
                   // if there is no grade then it is pointless to call api.
-                  $.get(url).success(renderStaffGrading);
+                  $.get(url).success(renderStaffGrading).fail(function() {
+                    $(this).prop('disabled', false);
+                    form.find('.ccx-enter-grade-spinner').hide();
+                  });
                 } else {
-                    gradeFormError('<br/>No grade to remove.');
+                  gradeFormError('<br/>'+gettext('No grade to remove.'));
                 }
             });
             form.find('#enter-grade-cancel').on('click', function() {
@@ -280,9 +320,10 @@ function StaffGradedAssignmentXBlock(runtime, element) {
         $(function($) { // onLoad
             var block = $(element).find('.sga-block');
             var state = block.attr('data-state');
-            render(JSON.parse(state));
+            var parsedState = JSON.parse(state);
+            render(parsedState);
 
-            var is_staff = block.attr('data-staff') == 'True';
+            var is_staff = isStaff();
             if (is_staff) {
                 gradingTemplate = _.template(
                     $(element).find('#sga-grading-tmpl').text());
@@ -296,8 +337,97 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     });
                 block.find('#staff-debug-info-button')
                     .leanModal();
+
+                $(element).find('#download-init-button').click(function(e) {
+                  e.preventDefault();
+                  var self = this;
+                  $.get(prepareDownloadSubmissionsUrl).then(
+                    function(data) {
+                      if (data["downloadable"]) {
+                        window.location = downloadSubmissionsUrl;
+                        $(self).removeClass("disabled");
+                      } else {
+                        $(self).addClass("disabled");
+                        $(element).find('.task-message')
+                          .show()
+                          .html(preparingSubmissionsMsg)
+                          .removeClass("ready-msg")
+                          .addClass("preparing-msg");
+                        pollSubmissionDownload();
+                      }
+                    }
+                  ).fail(
+                    function() {
+                      $(self).removeClass("disabled");
+                      $(element).find('.task-message')
+                        .show()
+                        .html(
+                          interpolate(
+                            gettext(
+                              'The download file was not created. Please try again or contact %(support_email)s'
+                            ),
+                            {support_email: $(element).find('.sga-block').attr("data-support-email")},
+                            true
+                          )
+                        )
+                        .removeClass("preparing-msg")
+                        .addClass("ready-msg");
+                    }
+                  );
+                });
             }
         });
+
+        function pollSubmissionDownload() {
+          pollUntilSuccess(downloadSubmissionsStatusUrl, checkResponse, 10000, 100).then(function() {
+            $(element).find('#download-init-button').removeClass("disabled");
+            $(element).find('.task-message')
+              .show()
+              .html(gettext("Student submission file ready for download"))
+              .removeClass("preparing-msg")
+              .addClass("ready-msg");
+          }).fail(function() {
+            $(element).find('#download-init-button').removeClass("disabled");
+            $(element).find('.task-message')
+              .show()
+              .html(
+                interpolate(
+                  gettext(
+                    'The download file was not created. Please try again or contact %(support_email)s'
+                  ),
+                  {support_email: $(element).find('.sga-block').attr("data-support-email")},
+                  true
+                )
+              );
+          });
+        }
+    }
+
+    function checkResponse(response) {
+      return response["zip_available"];
+    }
+
+    function pollUntilSuccess(url, checkSuccessFn, intervalMs, maxTries) {
+      var deferred = $.Deferred(),
+        tries = 1;
+
+      function makeLoopingRequest() {
+        $.get(url).success(function(response) {
+          if (checkSuccessFn(response)) {
+            deferred.resolve(response);
+          } else if (tries < maxTries) {
+            tries++;
+            setTimeout(makeLoopingRequest, intervalMs);
+          } else {
+            deferred.reject('Max tries exceeded.');
+          }
+        }).fail(function(err) {
+          deferred.reject('Request failed:\n' + err.responseText);
+        });
+      }
+      makeLoopingRequest();
+
+      return deferred.promise();
     }
 
     function loadjs(url) {
