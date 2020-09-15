@@ -23,6 +23,36 @@ msgstr ""
 msgid "Settings"
 msgstr "Параметри"
 
+#: edx_sga/sga.py
+msgid "This name appears in the horizontal navigation at the top of the page."
+msgstr "Ця назва відображається в горизонтальній навігації вгорі сторінки."
+
+#: edx_sga/sga.py
+msgid "Problem Weight"
+msgstr "Вага завдання"
+
+#: edx_sga/sga.py
+msgid ""
+"Defines the number of points each problem is worth. If the value is not set,"
+" the problem is worth the sum of the option point values."
+msgstr "Визначає кількість балів, що вартує кожна задача. Якщо значення не встановлено, проблема вартує суми значень балів опції."
+
+#: edx_sga/sga.py
+msgid "Maximum score"
+msgstr "Максимальний бал"
+
+#: edx_sga/sga.py
+msgid "Maximum grade score given to assignment by staff."
+msgstr "Максимальний бал, присвоєний персоналом."
+
+#: edx_sga/sga.py
+msgid "Score assigned by non-instructor staff"
+msgstr "Оцінка, присвоєна невикладацьким персоналом"
+
+#: edx_sga/sga.py
+msgid "Score will need to be approved by instructor before being published."
+msgstr "Оцінка повинна бути затверджена викладачем перед публікацією"
+
 #: templates/staff_graded_assignment/show.html:7
 msgid "File uploaded"
 msgstr "Файл вивантажено"
@@ -35,13 +65,55 @@ msgstr "Жодного файлу не було вивантажено"
 msgid "Your score is"
 msgstr "Ваша оцінка"
 
+#: edx_sga/templates/staff_graded_assignment/show.html
+#, python-format
+msgid "Your score is %(graded_score)s / %(max_score)s"
+msgstr "Ваша оцінка %(graded_score)s / %(max_score)s"
+
 #: templates/staff_graded_assignment/show.html:15
 msgid "Instructor comment"
 msgstr "Коментар викладача"
 
+#: edx_sga/sga.py
+msgid "Feedback given to student by instructor."
+msgstr "Зворотній зв'язок, даний студенту викладачем."
+
 #: templates/staff_graded_assignment/show.html:18
 msgid "Annotated file from instructor"
 msgstr "Файл з анотаціями від викладача"
+
+#: edx_sga/sga.py
+msgid "Annotated SHA1"
+msgstr "SHA1 файла-анотації"
+
+#: edx_sga/sga.py
+msgid "Annotated file name"
+msgstr "Назва файла-анотації"
+
+#: edx_sga/sga.py
+msgid "The name of the annotated file uploaded for this assignment."
+msgstr "Ім'я файла-анотації, завантаженого для цього завдання."
+
+#: edx_sga/sga.py
+msgid ""
+"sha1 of the annotated file uploaded by the instructor for this assignment."
+msgstr "sha1 файла-анотації, завантаженого викладачем для цього завдання."
+
+#: edx_sga/sga.py
+msgid "Mime type of annotated file"
+msgstr "MIME-тип файла-анотації"
+
+#: edx_sga/sga.py
+msgid "MIME-тип файла-анотації, завантаженого для цього завдання."
+msgstr ""
+
+#: edx_sga/sga.py
+msgid "Timestamp"
+msgstr "Мітка часу"
+
+#: edx_sga/sga.py
+msgid "When the annotated file was uploaded"
+msgstr "Коли було завантажено файл-анотацію"
 
 #: templates/staff_graded_assignment/show.html:23
 #: templates/staff_graded_assignment/show_en.html:23
@@ -66,6 +138,10 @@ msgstr "Оберіть файл"
 msgid "Username"
 msgstr "Користувач"
 
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "Name"
+msgstr "Ім'я"
+
 #: templates/staff_graded_assignment/show.html:51
 msgid "Filename"
 msgstr "Файл"
@@ -85,6 +161,10 @@ msgstr "Коментар викладача"
 #: templates/staff_graded_assignment/show.html:55
 msgid "Annotated"
 msgstr "Анотовано"
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "Actions"
+msgstr "Дії"
 
 #: templates/staff_graded_assignment/show.html:75
 #: templates/staff_graded_assignment/show_en.html:76
@@ -116,6 +196,10 @@ msgstr "Оцінити"
 msgid "Staff Debug Info"
 msgstr "Інформація для співробітників"
 
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "Loading..."
+msgstr "Завантаження..."
+
 #: templates/staff_graded_assignment/show.html:118
 #: templates/staff_graded_assignment/show_en.html:119
 msgid "Staff Graded Assignment"
@@ -125,6 +209,10 @@ msgstr "Завдання оцінюване викладачем"
 #: templates/staff_graded_assignment/show_en.html:130
 #: templates/staff_graded_assignment/show_ua.html:128
 msgid "Staff Debug"
+msgstr "Налагодження для персоналу"
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "is_released"
 msgstr ""
 
 #: templates/staff_graded_assignment/show.html:136
@@ -141,6 +229,11 @@ msgstr "Введіть оцінку"
 #: templates/staff_graded_assignment/show.html:161
 msgid "Grade for"
 msgstr "Оцінка за"
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+#, python-format
+msgid "Grade for %(student_name)s"
+msgstr "Оцінка %(student_name)s"
 
 #: templates/staff_graded_assignment/show.html:162
 msgid "Grade:"
